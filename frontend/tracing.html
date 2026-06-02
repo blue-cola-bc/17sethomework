@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>追溯档案 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+<div class="app-layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div><h2>智农监控平台</h2><p>Smart AgriIoT</p></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>监控看板</a>
+      <a href="devices.html" class="nav-item"><span class="nav-icon">📡</span>设备管理</a>
+      <a href="alerts.html" class="nav-item"><span class="nav-icon">🔔</span>告警中心</a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item"><span class="nav-icon">🗺️</span>地块管理</a>
+      <a href="tracing.html" class="nav-item active"><span class="nav-icon">🔍</span>追溯档案</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon">📈</span>统计报表</a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">🔍 追溯档案</div>
+      <div class="topbar-actions">
+        <div class="topbar-user">
+          <div class="t-avatar" id="topbarAvatar">刘</div>
+          <span id="topbarName">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a><span>›</span><span>追溯档案</span>
+      </div>
+
+      <!-- 查询栏 -->
+      <div class="card mb-6" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">🔎</span>批次查询</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+            <div class="filter-item">
+              <label>选择批次:</label>
+              <select id="batchSelect" style="min-width:220px;"></select>
+            </div>
+            <span style="color:#9E9E9E;font-size:13px;">或</span>
+            <div class="filter-item">
+              <label>输入批次号:</label>
+              <input id="batchInput" type="text" placeholder="例如：B2024001" style="width:160px;" />
+            </div>
+            <button class="btn btn-primary" id="searchBtn">查询</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 批次基本信息 -->
+      <div class="card mb-6" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">📋</span>批次基本信息</div>
+        </div>
+        <div class="card-body" id="batchInfoCard"></div>
+      </div>
+
+      <!-- 种植进度节点 -->
+      <div class="card mb-6" style="margin-bottom:20px;">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">🚦</span>种植关键节点</div>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;justify-content:space-between;padding:0 10px 10px;" id="progressSteps"></div>
+        </div>
+      </div>
+
+      <!-- 追溯时间线 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">📅</span>田间作业时间线</div>
+          <button class="btn btn-sm btn-outline" onclick="showToast('新增记录功能（演示模式）','info')">＋ 添加记录</button>
+        </div>
+        <div class="card-body" id="tracingTimeline"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/mock-data.js"></script>
+<script src="js/tracing.js"></script>
+</body>
+</html>

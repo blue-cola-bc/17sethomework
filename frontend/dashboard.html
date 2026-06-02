@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>监控看板 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <!-- ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- 侧边栏 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div>
+        <h2>智农监控平台</h2>
+        <p>Smart AgriIoT</p>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">📊</span>监控看板
+      </a>
+      <a href="devices.html" class="nav-item">
+        <span class="nav-icon">📡</span>设备管理
+      </a>
+      <a href="alerts.html" class="nav-item">
+        <span class="nav-icon">🔔</span>告警中心
+      </a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item">
+        <span class="nav-icon">🗺️</span>地块管理
+      </a>
+      <a href="tracing.html" class="nav-item">
+        <span class="nav-icon">🔍</span>追溯档案
+      </a>
+      <a href="reports.html" class="nav-item">
+        <span class="nav-icon">📈</span>统计报表
+      </a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <!-- 主内容 -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">🌿 实时监控看板</div>
+      <div class="topbar-actions">
+        <!-- 区域切换 -->
+        <select id="areaSelect" style="border:1px solid #E0E0E0;border-radius:6px;padding:6px 10px;font-size:13px;color:#424242;outline:none;cursor:pointer;">
+          <option value="FA">农场A — 浦口区</option>
+          <option value="FB">农场B — 溧水区</option>
+          <option value="FC">农场C — 高淳区</option>
+        </select>
+        <span style="font-size:12px;color:#9E9E9E;">刷新: <span id="refreshTime">--</span></span>
+        <!-- 用户信息 -->
+        <div class="topbar-user" id="topbarUser">
+          <div class="t-avatar">刘</div>
+          <span class="u-name">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <!-- 面包屑 -->
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a>
+        <span>›</span><span>监控看板</span>
+      </div>
+
+      <!-- 统计数字行 -->
+      <div class="stat-row mb-6">
+        <div class="stat-card">
+          <div class="stat-num" id="devTotalNum">17</div>
+          <div class="stat-label">设备总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="devOnlineNum">13</div>
+          <div class="stat-label">在线设备</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-num" id="alertUnhandledNum">2</div>
+          <div class="stat-label">未处理告警</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-num">3</div>
+          <div class="stat-label">种植批次</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-num" id="devFaultNum">1</div>
+          <div class="stat-label">故障设备</div>
+        </div>
+      </div>
+
+      <!-- 环境指标卡片 -->
+      <div class="flex-between mb-4">
+        <h3 style="font-size:15px;font-weight:700;color:#1B5E20;">📌 环境实时指标</h3>
+        <span style="font-size:12px;color:#9E9E9E;">每5秒自动刷新</span>
+      </div>
+      <div class="metric-grid" id="metricGrid">
+        <!-- 由 dashboard.js 渲染 -->
+      </div>
+
+      <!-- 主内容两列 -->
+      <div class="grid-2 mb-6">
+        <!-- 趋势图 -->
+        <div class="card" style="grid-column: span 1;">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">📉</span>24小时环境趋势</div>
+            <span style="font-size:12px;color:#9E9E9E;">温度 / 湿度 / 土壤水分</span>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="trendChart" class="chart-container"></div>
+          </div>
+        </div>
+
+        <!-- 设备概览 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">📡</span>设备在线概览</div>
+            <a href="devices.html" style="font-size:12px;color:#1976D2;">查看全部 →</a>
+          </div>
+          <div class="card-body">
+            <!-- 环形图 -->
+            <div id="deviceChart" class="chart-sm" style="height:180px;"></div>
+            <!-- 图例 -->
+            <div style="display:flex;justify-content:center;gap:28px;margin-top:12px;">
+              <div style="text-align:center;">
+                <div style="font-size:24px;font-weight:700;color:#2E7D32;" id="devOnlineNum2">—</div>
+                <div style="font-size:12px;color:#616161;">在线</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:24px;font-weight:700;color:#9E9E9E;" id="devOfflineNum">—</div>
+                <div style="font-size:12px;color:#616161;">离线</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:24px;font-weight:700;color:#C62828;" id="devFaultNum2">—</div>
+                <div style="font-size:12px;color:#616161;">故障</div>
+              </div>
+            </div>
+            <!-- 进度条 -->
+            <div style="margin-top:16px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:#616161;margin-bottom:4px;">
+                <span>设备在线率</span>
+                <span id="onlineRateTxt">—%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="onlineRateBar" style="width:0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 告警摘要 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">🔔</span>最新告警摘要</div>
+          <a href="alerts.html" style="font-size:12px;color:#1976D2;">查看全部 →</a>
+        </div>
+        <div class="card-body" style="padding:12px 16px;">
+          <div id="alertList">
+            <!-- 由 dashboard.js 渲染 -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/mock-data.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+  // 同步次级指标到页面
+  window.addEventListener("DOMContentLoaded", () => {
+    const stats = getDeviceStats();
+    const onlineRate = Math.round(stats.online / stats.total * 100);
+    const el = id => document.getElementById(id);
+    if (el("devOnlineNum2"))  el("devOnlineNum2").textContent  = stats.online;
+    if (el("devOfflineNum"))  el("devOfflineNum").textContent  = stats.offline;
+    if (el("devFaultNum2"))   el("devFaultNum2").textContent   = stats.fault;
+    if (el("onlineRateTxt"))  el("onlineRateTxt").textContent  = onlineRate + "%";
+    if (el("onlineRateBar"))  el("onlineRateBar").style.width  = onlineRate + "%";
+    // 更新刷新时间
+    el("refreshTime").textContent = new Date().toLocaleTimeString("zh-CN");
+  });
+</script>
+</body>
+</html>

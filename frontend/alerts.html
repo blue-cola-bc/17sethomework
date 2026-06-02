@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>告警中心 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div><h2>智农监控平台</h2><p>Smart AgriIoT</p></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>监控看板</a>
+      <a href="devices.html" class="nav-item"><span class="nav-icon">📡</span>设备管理</a>
+      <a href="alerts.html" class="nav-item active"><span class="nav-icon">🔔</span>告警中心</a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item"><span class="nav-icon">🗺️</span>地块管理</a>
+      <a href="tracing.html" class="nav-item"><span class="nav-icon">🔍</span>追溯档案</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon">📈</span>统计报表</a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">🔔 告警中心</div>
+      <div class="topbar-actions">
+        <div class="topbar-user">
+          <div class="t-avatar" id="topbarAvatar">刘</div>
+          <span id="topbarName">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a><span>›</span><span>告警中心</span>
+      </div>
+
+      <!-- 统计行 -->
+      <div class="stat-row mb-6">
+        <div class="stat-card red"><div class="stat-num" id="sTotal">25</div><div class="stat-label">告警总数</div></div>
+        <div class="stat-card red"><div class="stat-num" id="sCritical" style="color:#C62828">7</div><div class="stat-label">严重</div></div>
+        <div class="stat-card orange"><div class="stat-num" id="sWarning">11</div><div class="stat-label">警告</div></div>
+        <div class="stat-card blue"><div class="stat-num" id="sInfo">7</div><div class="stat-label">提示</div></div>
+        <div class="stat-card red"><div class="stat-num" id="sUnhandled">2</div><div class="stat-label">待处理</div></div>
+      </div>
+
+      <!-- 图表行 -->
+      <div class="grid-2 mb-6">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">📊</span>告警等级分布</div>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="levelPieChart" style="height:220px;"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">📉</span>近14天告警趋势</div>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="trendBarChart" style="height:220px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 筛选栏 -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label>告警等级:</label>
+          <select id="fLevel">
+            <option value="">全部等级</option>
+            <option value="critical">严重</option>
+            <option value="warning">警告</option>
+            <option value="info">提示</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>处理状态:</label>
+          <select id="fStatus">
+            <option value="">全部状态</option>
+            <option value="unhandled">未处理</option>
+            <option value="confirmed">已确认</option>
+            <option value="closed">已关闭</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>设备搜索:</label>
+          <input id="fDevice" type="text" placeholder="输入设备名称..." style="width:180px;" />
+        </div>
+      </div>
+
+      <!-- 告警表格 -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>告警ID</th>
+              <th>设备</th>
+              <th>告警指标</th>
+              <th>当前值</th>
+              <th>阈值</th>
+              <th>等级</th>
+              <th>时间</th>
+              <th>状态/操作</th>
+            </tr>
+          </thead>
+          <tbody id="alertTableBody"></tbody>
+        </table>
+        <div class="pagination" id="alertPagination"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/mock-data.js"></script>
+<script src="js/alerts.js"></script>
+</body>
+</html>
