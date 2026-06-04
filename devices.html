@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>设备管理 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- 侧边栏 -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div><h2>智农监控平台</h2><p>Smart AgriIoT</p></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>监控看板</a>
+      <a href="devices.html" class="nav-item active"><span class="nav-icon">📡</span>设备管理</a>
+      <a href="alerts.html" class="nav-item"><span class="nav-icon">🔔</span>告警中心</a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item"><span class="nav-icon">🗺️</span>地块管理</a>
+      <a href="tracing.html" class="nav-item"><span class="nav-icon">🔍</span>追溯档案</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon">📈</span>统计报表</a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">📡 设备管理</div>
+      <div class="topbar-actions">
+        <div class="topbar-user">
+          <div class="t-avatar" id="topbarAvatar">刘</div>
+          <span id="topbarName">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a><span>›</span><span>设备管理</span>
+      </div>
+
+      <!-- 统计行 -->
+      <div class="stat-row mb-6">
+        <div class="stat-card"><div class="stat-num" id="statTotal">17</div><div class="stat-label">设备总数</div></div>
+        <div class="stat-card"><div class="stat-num" id="statOnline">13</div><div class="stat-label">在线</div></div>
+        <div class="stat-card"><div class="stat-num" id="statOffline" style="color:#9E9E9E">2</div><div class="stat-label">离线</div></div>
+        <div class="stat-card red"><div class="stat-num" id="statFault">1</div><div class="stat-label">故障</div></div>
+      </div>
+
+      <!-- 筛选栏 -->
+      <div class="filter-bar">
+        <div class="filter-item">
+          <label>设备类型:</label>
+          <select id="filterType">
+            <option value="">全部类型</option>
+            <option value="sensor">传感器</option>
+            <option value="controller">控制器</option>
+            <option value="gateway">网关</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>设备状态:</label>
+          <select id="filterStatus">
+            <option value="">全部状态</option>
+            <option value="online">在线</option>
+            <option value="offline">离线</option>
+            <option value="fault">故障</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>所属农场:</label>
+          <select id="filterFarm">
+            <option value="">全部农场</option>
+            <option value="FA">农场A</option>
+            <option value="FB">农场B</option>
+            <option value="FC">农场C</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>搜索:</label>
+          <input id="searchInput" type="text" placeholder="输入设备名称/ID..." style="width:180px;" />
+        </div>
+        <div style="margin-left:auto;">
+          <button class="btn btn-primary" id="addDeviceBtn">＋ 新增设备</button>
+        </div>
+      </div>
+
+      <!-- 表格 -->
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>设备ID</th>
+              <th>设备名称/型号</th>
+              <th>类型</th>
+              <th>状态</th>
+              <th>安装位置</th>
+              <th>最后更新</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="devTableBody">
+            <!-- 由 devices.js 渲染 -->
+          </tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 设备详情弹窗 -->
+<div class="modal-overlay hidden" id="deviceModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">设备详情</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-gray" onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新增/编辑设备弹窗 -->
+<div class="modal-overlay hidden" id="addDeviceModal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-title" id="addModalTitle">新增设备</div>
+      <button class="modal-close" onclick="closeAddModal()">×</button>
+    </div>
+    <div class="modal-body" id="addModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-gray" onclick="closeAddModal()">取消</button>
+      <button class="btn btn-primary" id="addModalSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/mock-data.js"></script>
+<script src="js/api-client.js"></script>
+<script src="js/devices.js"></script>
+</body>
+</html>

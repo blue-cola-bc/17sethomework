@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智能农业物联网监控平台 — 登录</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    /* 粒子背景增强 */
+    .particle { position: absolute; border-radius: 50%; pointer-events: none; animation: float linear infinite; }
+    @keyframes float {
+      0%   { transform: translateY(0)    rotate(0deg);   opacity: .7; }
+      100% { transform: translateY(-120vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-page" id="loginPage">
+    <!-- 浮动粒子 -->
+    <div id="particles"></div>
+
+    <div class="login-container" style="position:relative;z-index:2;">
+      <div class="login-logo">
+        <div class="logo-icon">🌾</div>
+        <h1>智能农业物联网监控平台</h1>
+        <p>Smart Agriculture IoT Monitoring Platform</p>
+      </div>
+
+      <hr class="login-divider" />
+
+      <p class="login-subtitle">请选择您的账号登录系统</p>
+
+      <div class="user-cards">
+        <div class="user-card" data-role="admin" onclick="login(0)">
+          <div class="avatar">刘</div>
+          <div class="name">刘芮宏</div>
+          <div class="role">实训组组长</div>
+          <div class="badge">管理员</div>
+        </div>
+        <div class="user-card" data-role="viewer" onclick="login(1)">
+          <div class="avatar" style="background:linear-gradient(135deg,#1976D2,#42A5F5)">王</div>
+          <div class="name">王攀杰</div>
+          <div class="role">前端开发</div>
+          <div class="badge">普通用户</div>
+        </div>
+        <div class="user-card" data-role="viewer" onclick="login(2)">
+          <div class="avatar" style="background:linear-gradient(135deg,#1976D2,#42A5F5)">常</div>
+          <div class="name">常琳昊</div>
+          <div class="role">后端开发</div>
+          <div class="badge">普通用户</div>
+        </div>
+        <div class="user-card" data-role="tester" onclick="login(3)">
+          <div class="avatar" style="background:linear-gradient(135deg,#F57C00,#FFB74D)">杨</div>
+          <div class="name">杨航</div>
+          <div class="role">测试工程师</div>
+          <div class="badge">测试员</div>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <p>2024 智慧农业实训项目 · 南京农业大学</p>
+        <p style="margin-top:4px;">版本 v1.0.0-M2 &nbsp;|&nbsp; 实训周期: 2024.06</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/api-client.js"></script>
+  <script>
+    // ── 粒子背景 ──
+    (function createParticles() {
+      const container = document.getElementById("particles");
+      const colors = ["rgba(255,255,255,.15)", "rgba(165,214,167,.25)", "rgba(129,199,132,.2)", "rgba(66,165,245,.15)"];
+      for (let i = 0; i < 28; i++) {
+        const el = document.createElement("div");
+        const size = Math.random() * 18 + 6;
+        el.className = "particle";
+        el.style.cssText = [
+          `width:${size}px`, `height:${size}px`,
+          `left:${Math.random() * 100}%`,
+          `top:${Math.random() * 100 + 100}%`,
+          `background:${colors[Math.floor(Math.random() * colors.length)]}`,
+          `animation-duration:${Math.random() * 12 + 8}s`,
+          `animation-delay:${Math.random() * 8}s`
+        ].join(";");
+        container.appendChild(el);
+      }
+    })();
+
+    // ── 登录逻辑 ──
+    function login(idx) {
+      const user = USERS[idx];
+      setCurrentUser(user);
+
+      // 视觉反馈
+      const cards = document.querySelectorAll(".user-card");
+      cards.forEach((c, i) => {
+        if (i === idx) {
+          c.style.transform = "scale(0.95)";
+          c.style.boxShadow = "0 0 0 3px #2E7D32";
+        } else {
+          c.style.opacity = "0.4";
+        }
+      });
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 400);
+    }
+
+    // ── 卡片悬浮小动画 ──
+    document.querySelectorAll(".user-card").forEach(card => {
+      card.addEventListener("mouseenter", () => {
+        card.style.transform = "translateY(-5px)";
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
+    });
+  </script>
+</body>
+</html>

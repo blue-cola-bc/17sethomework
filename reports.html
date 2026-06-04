@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>统计报表 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div><h2>智农监控平台</h2><p>Smart AgriIoT</p></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>监控看板</a>
+      <a href="devices.html" class="nav-item"><span class="nav-icon">📡</span>设备管理</a>
+      <a href="alerts.html" class="nav-item"><span class="nav-icon">🔔</span>告警中心</a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item"><span class="nav-icon">🗺️</span>地块管理</a>
+      <a href="tracing.html" class="nav-item"><span class="nav-icon">🔍</span>追溯档案</a>
+      <a href="reports.html" class="nav-item active"><span class="nav-icon">📈</span>统计报表</a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">📈 统计报表</div>
+      <div class="topbar-actions">
+        <div class="topbar-user">
+          <div class="t-avatar" id="topbarAvatar">刘</div>
+          <span id="topbarName">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a><span>›</span><span>统计报表</span>
+      </div>
+
+      <!-- 图表行 1 -->
+      <div class="grid-2 mb-6">
+        <!-- 环境趋势 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">🌡️</span>环境趋势（近N天）</div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-sm btn-primary period-btn active" data-group="env" data-val="7">7天</button>
+              <button class="btn btn-sm btn-outline period-btn" data-group="env" data-val="14">14天</button>
+              <button class="btn btn-sm btn-outline period-btn" data-group="env" data-val="30">30天</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="envTrendChart" class="chart-lg"></div>
+          </div>
+        </div>
+
+        <!-- 告警统计 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">🔔</span>告警统计</div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-sm btn-primary period-btn active" data-group="alert" data-val="day">按天</button>
+              <button class="btn btn-sm btn-outline period-btn" data-group="alert" data-val="week">按周</button>
+              <button class="btn btn-sm btn-outline period-btn" data-group="alert" data-val="month">按月</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="alertBarChart" class="chart-lg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 图表行 2 -->
+      <div class="grid-2 mb-6">
+        <!-- 设备在线率 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">📡</span>设备在线率（按农场）</div>
+          </div>
+          <div class="card-body" style="padding-bottom:8px;">
+            <div id="devicePieChart" class="chart-container"></div>
+          </div>
+        </div>
+
+        <!-- 告警规则 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="icon">⚙️</span>告警阈值规则</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>指标</th>
+                  <th>触发条件</th>
+                  <th>等级</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="rulesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 批次统计表格 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">🌱</span>批次统计汇总</div>
+          <button class="btn btn-sm btn-outline" onclick="showToast('导出功能（演示模式）','info')">📥 导出Excel</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>批次号</th>
+                <th>作物/品种</th>
+                <th>种植面积</th>
+                <th>播种日期</th>
+                <th>预计收获</th>
+                <th>负责人</th>
+                <th>关联设备</th>
+                <th>告警次数</th>
+                <th>状态/进度</th>
+              </tr>
+            </thead>
+            <tbody id="batchStatsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/mock-data.js"></script>
+<script src="js/api-client.js"></script>
+<script src="js/reports.js"></script>
+<script>
+  // 告警规则表
+  document.addEventListener("DOMContentLoaded", () => {
+    const tbody = document.getElementById("rulesTableBody");
+    if (!tbody) return;
+    const levels = { critical: "badge-danger", warning: "badge-warning", info: "badge-info" };
+    const levelLabel = { critical: "严重", warning: "警告", info: "提示" };
+    tbody.innerHTML = ALERT_RULES.map(r => `
+      <tr>
+        <td>${r.metric}</td>
+        <td style="font-family:monospace;">${r.condition}</td>
+        <td><span class="badge ${levels[r.level]}">${levelLabel[r.level]}</span></td>
+        <td><span class="badge ${r.enabled ? "badge-success" : "badge-default"}">${r.enabled ? "启用" : "禁用"}</span></td>
+      </tr>
+    `).join("");
+  });
+</script>
+</body>
+</html>

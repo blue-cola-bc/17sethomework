@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>地块管理 — 智能农业物联网监控平台</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+<div class="app-layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-icon">🌾</span>
+      <div><h2>智农监控平台</h2><p>Smart AgriIoT</p></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">核心功能</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span>监控看板</a>
+      <a href="devices.html" class="nav-item"><span class="nav-icon">📡</span>设备管理</a>
+      <a href="alerts.html" class="nav-item"><span class="nav-icon">🔔</span>告警中心</a>
+      <div class="nav-section-title">农场管理</div>
+      <a href="fields.html" class="nav-item active"><span class="nav-icon">🗺️</span>地块管理</a>
+      <a href="tracing.html" class="nav-item"><span class="nav-icon">🔍</span>追溯档案</a>
+      <a href="reports.html" class="nav-item"><span class="nav-icon">📈</span>统计报表</a>
+    </div>
+    <div class="sidebar-footer">v1.0.0-M2 · 2024.06</div>
+  </nav>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="topbar-title">🗺️ 地块管理</div>
+      <div class="topbar-actions">
+        <div class="topbar-user">
+          <div class="t-avatar" id="topbarAvatar">刘</div>
+          <span id="topbarName">刘芮宏</span>
+        </div>
+        <button class="btn-logout" onclick="window.location.href='index.html'">退出</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb">
+        <span>🏠</span><a href="dashboard.html">首页</a><span>›</span><span>地块管理</span>
+      </div>
+
+      <!-- 主内容：左树右卡片 -->
+      <div style="display:flex;gap:20px;align-items:flex-start;">
+        <!-- 左侧树形导航 -->
+        <div style="flex-shrink:0;width:200px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><span class="icon">🌾</span>农场/区域</div></div>
+            <div class="card-body" style="padding:8px;">
+              <div class="tree-nav" id="treeNav"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧地块卡片 -->
+        <div style="flex:1;min-width:0;">
+          <div class="flex-between mb-4">
+            <h3 style="font-size:15px;font-weight:700;color:#1B5E20;" id="fieldListTitle">农场A — 地块列表</h3>
+            <button class="btn btn-primary btn-sm" onclick="showToast('新增地块功能（演示模式）','info')">＋ 新增地块</button>
+          </div>
+          <div class="field-cards" id="fieldCards"></div>
+        </div>
+      </div>
+
+      <!-- 种植批次管理 -->
+      <div class="card mt-4" style="margin-top:24px;">
+        <div class="card-header">
+          <div class="card-title"><span class="icon">🌱</span>种植批次管理</div>
+          <button class="btn btn-primary btn-sm" onclick="showToast('新增批次功能（演示模式）','info')">＋ 新建批次</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>批次号</th>
+                <th>作物/品种</th>
+                <th>播种日期</th>
+                <th>预计收获</th>
+                <th>种植面积</th>
+                <th>负责人</th>
+                <th>状态/进度</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="batchTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 地块详情弹窗 -->
+<div class="modal-overlay hidden" id="fieldModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="fModalTitle">地块详情</div>
+      <button class="modal-close" onclick="closeFieldModal()">×</button>
+    </div>
+    <div class="modal-body" id="fModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-gray" onclick="closeFieldModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="js/mock-data.js"></script>
+<script src="js/api-client.js"></script>
+<script src="js/fields.js"></script>
+</body>
+</html>
