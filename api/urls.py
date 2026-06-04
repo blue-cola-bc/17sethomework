@@ -1,0 +1,36 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path("mock-data", views.mock_data),
+    path("auth/login", views.login),
+    path("auth/me", views.me),
+    path("auth/logout", views.logout),
+    path("sensor/realtime", views.sensor_realtime),
+    path("sensor/history", views.sensor_history),
+    path("sensor/upload", views.sensor_upload),
+    path("devices", views.devices),
+    path("devices/stats", views.device_stats),
+    path("devices/<str:device_id>", views.device_detail),
+    path("alerts", views.alerts),
+    path("alerts/stats", views.alert_stats),
+    path("alerts/rules", views.alert_rules),
+    path("alerts/rules/<str:rule_id>", views.alert_rule_detail),
+    path("alerts/<str:alert_id>/confirm", views.alert_confirm),
+    path("alerts/<str:alert_id>/close", views.alert_close),
+    path("farms", views.farms),
+    path("zones", views.zones),
+    path("fields", views.fields),
+    path("fields/<str:field_id>", views.field_detail),
+    path("batches", views.batches),
+    path("batches/<str:batch_id>", views.batch_detail),
+    path("batches/<str:batch_id>/status", views.batch_status),
+    path("tracing/<str:batch_id>", views.tracing),
+    path("tracing/<str:batch_id>/records", views.tracing_records),
+    path("tracing/public/<str:trace_code>", views.tracing_public),
+    path("reports/env-trend", views.report_env_trend),
+    path("reports/alert-stats", views.report_alert_stats),
+    path("reports/device-online-rate", views.report_device_online_rate),
+    path("reports/batch-summary", views.report_batch_summary),
+]
